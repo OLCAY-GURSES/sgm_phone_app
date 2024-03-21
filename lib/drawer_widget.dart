@@ -106,7 +106,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               quarterTurns: isRefreshing ? 1 : 0,
               child: Icon(Icons.refresh),
             ),
-            title: Text('Notifications'),
+            title: Text('Recharger les données les plus récentes'),
             trailing: isLoading
                 ? CircularProgressIndicator()
                 : unreadNotificationCount != null && unreadNotificationCount! > 0

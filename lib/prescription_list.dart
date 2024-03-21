@@ -553,6 +553,7 @@ class _PrescriptionDetailsState extends State<PrescriptionDetails> {
                       itemBuilder: (context, index) {
                         final test = widget.prescriptionTests[index];
                         final testName = test['test_name'];
+                        final testDescription = test['test_description'];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -565,9 +566,19 @@ class _PrescriptionDetailsState extends State<PrescriptionDetails> {
                                   color: Colors.white,
                                 ),
                                 padding: EdgeInsets.all(8),
-                                child: Text(
-                                  'Test: $testName',
-                                  style: TextStyle(color: Colors.black),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Test: $testName',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      'Description: $testDescription',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
