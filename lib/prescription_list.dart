@@ -8,8 +8,6 @@ import 'dart:core';
 import 'package:intl/date_symbol_data_local.dart';
 import 'drawer_widget.dart';
 
-
-
 class PrescriptionList extends StatefulWidget {
   final int patientId;
 
@@ -21,7 +19,6 @@ class PrescriptionList extends StatefulWidget {
 
 class _PrescriptionListState extends State<PrescriptionList> {
   List<dynamic> prescriptions = [];
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -35,12 +32,13 @@ class _PrescriptionListState extends State<PrescriptionList> {
 
     if (token != null) {
       final response = await http.get(
+        //Uri.parse('http://10.0.2.2:8000/api/patient/profile/${widget.patientId}/'),
         Uri.parse('https://sgmlille.pythonanywhere.com/api/patient/profile/${widget.patientId}/'),
         headers: {'Authorization': 'Token $token'},
       );
 
       if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
+        final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
         List<dynamic> tempPrescriptions = [];
 
         for (var prescriptionJson in jsonResponse['prescription']) {
@@ -49,19 +47,34 @@ class _PrescriptionListState extends State<PrescriptionList> {
           }
         }
 
-        setState(() {
-          prescriptions = tempPrescriptions;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
+        if (tempPrescriptions.isEmpty) {
+          // Pas de prescription pour ce patient
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Aucune prescription'),
+              content: Text('Aucune prescription n\'a été trouvée pour ce patient.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          setState(() {
+            prescriptions = tempPrescriptions;
+          });
+        }
       }
-    } else {
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
@@ -80,19 +93,7 @@ class _PrescriptionListState extends State<PrescriptionList> {
         backgroundColor: Color(0xFF32DFFF),
       ),
       drawer: DrawerWidget(),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : prescriptions.isEmpty
-          ? Center(
-        child: Text(
-          'Aucune prescription trouvée pour ce patient.',
-          style: TextStyle(
-            color: Colors.black54,
-            fontSize: 16.0,
-          ),
-        ),
-      )
-          : Container(
+      body: Container(
         color: Colors.white,
         child: ListView.builder(
           itemCount: prescriptions.length,
@@ -112,7 +113,7 @@ class _PrescriptionListState extends State<PrescriptionList> {
                     builder: (context) => PrescriptionDetails(
                       prescription: prescription,
                       prescriptionMedicines: prescriptionMedicines,
-                      prescriptionTests: prescriptionTests.cast<Map<String, dynamic>>(),
+                      prescriptionTests: prescriptionTests.cast<Map<String, dynamic>>(), // Conversion de la liste
                     ),
                   ),
                 );
@@ -147,8 +148,6 @@ class _PrescriptionListState extends State<PrescriptionList> {
     );
   }
 }
-
-
 
 class PrescriptionDetails extends StatefulWidget {
   final Map<String, dynamic> prescription;
