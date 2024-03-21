@@ -8,6 +8,7 @@ import 'dart:core';
 import 'package:intl/date_symbol_data_local.dart';
 import 'drawer_widget.dart';
 
+
 class PrescriptionList extends StatefulWidget {
   final int patientId;
 
@@ -19,6 +20,7 @@ class PrescriptionList extends StatefulWidget {
 
 class _PrescriptionListState extends State<PrescriptionList> {
   List<dynamic> prescriptions = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -32,7 +34,7 @@ class _PrescriptionListState extends State<PrescriptionList> {
 
     if (token != null) {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/patient/profile/${widget.patientId}/'),
+        Uri.parse('https://sgmlille.pythonanywhere.com/api/patient/profile/${widget.patientId}/'),
         headers: {'Authorization': 'Token $token'},
       );
 
@@ -48,8 +50,17 @@ class _PrescriptionListState extends State<PrescriptionList> {
 
         setState(() {
           prescriptions = tempPrescriptions;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
         });
       }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -68,7 +79,19 @@ class _PrescriptionListState extends State<PrescriptionList> {
         backgroundColor: Color(0xFF32DFFF),
       ),
       drawer: DrawerWidget(),
-      body: Container(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : prescriptions.isEmpty
+          ? Center(
+        child: Text(
+          'Aucune prescription trouvée pour ce patient.',
+          style: TextStyle(
+            color: Colors.black54,
+            fontSize: 16.0,
+          ),
+        ),
+      )
+          : Container(
         color: Colors.white,
         child: ListView.builder(
           itemCount: prescriptions.length,
@@ -88,7 +111,7 @@ class _PrescriptionListState extends State<PrescriptionList> {
                     builder: (context) => PrescriptionDetails(
                       prescription: prescription,
                       prescriptionMedicines: prescriptionMedicines,
-                      prescriptionTests: prescriptionTests.cast<Map<String, dynamic>>(), // Conversion de la liste
+                      prescriptionTests: prescriptionTests.cast<Map<String, dynamic>>(),
                     ),
                   ),
                 );
@@ -123,6 +146,8 @@ class _PrescriptionListState extends State<PrescriptionList> {
     );
   }
 }
+
+
 
 class PrescriptionDetails extends StatefulWidget {
   final Map<String, dynamic> prescription;
@@ -184,7 +209,8 @@ class _PrescriptionDetailsState extends State<PrescriptionDetails> {
           final prescriptionId = widget.prescription['prescription_id'];
           final updatedEndDateString = updatedEndDate.toIso8601String().split('T')[0];
           final response = await http.put(
-            Uri.parse('http://10.0.2.2:8000/api/prescriptions/$prescriptionId/medicines/$medicineId/end_date/'),
+            //Uri.parse('http://10.0.2.2:8000/api/prescriptions/$prescriptionId/medicines/$medicineId/end_date/'),
+            Uri.parse('https://sgmlille.pythonanywhere.com/api/prescriptions/$prescriptionId/medicines/$medicineId/end_date/'),
             headers: {
               'Authorization': 'Token $token',
               'Content-Type': 'application/json',

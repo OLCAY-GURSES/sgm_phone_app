@@ -26,7 +26,8 @@ class _PatientListPageState extends State<PatientListPage> {
 
       if (token != null) {
         final response = await http.get(
-          Uri.parse('http://10.0.2.2:8000/api/doctor/dashboard/'),
+          //Uri.parse('http://10.0.2.2:8000/api/doctor/dashboard/'),
+          Uri.parse('https://sgmlille.pythonanywhere.com/api/doctor/dashboard/'),
           headers: {'Authorization': 'Token $token'},
         );
 

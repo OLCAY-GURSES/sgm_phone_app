@@ -13,7 +13,8 @@ class LoginPage extends StatelessWidget {
     final String password = passwordController.text;
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/api/api-token-auth/'),
+      //Uri.parse('http://10.0.2.2:8000/api/api-token-auth/'),
+      Uri.parse('https://sgmlille.pythonanywhere.com/api/api-token-auth/'),
       body: {
 
         'username': username,

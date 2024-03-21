@@ -255,7 +255,7 @@ class _AddPrescriptionPageState extends State<AddPrescriptionPage> {
                   child: TextFormField(
                     decoration: InputDecoration(
                       labelText:
-                      'Informations supplémentaires', // Pas de décalage pour le labelText
+                      'Avis', // Pas de décalage pour le labelText
                       labelStyle: TextStyle(
                           color: Colors
                               .grey[600]), // Couleur du labelText
@@ -605,7 +605,8 @@ Future<bool> checkPatientExists(int patientId) async {
     return false;
   }
 
-  final url = Uri.parse('http://10.0.2.2:8000/api/patients/$patientId/');
+  //final url = Uri.parse('http://10.0.2.2:8000/api/patients/$patientId/');
+  final url = Uri.parse('https://sgmlille.pythonanywhere.com/api/patients/$patientId/');
   final headers = {
     'Authorization': 'Token $authToken',
   };
@@ -632,7 +633,8 @@ Future<bool> createPrescription(int patientId, Map<String, dynamic> prescription
     return false;
   }
 
-  final url = Uri.parse('http://10.0.2.2:8000/api/prescriptions/create/$patientId/');
+  //final url = Uri.parse('http://10.0.2.2:8000/api/prescriptions/create/$patientId/');
+  final url = Uri.parse('https://sgmlille.pythonanywhere.com/api/prescriptions/create/$patientId/');
   final headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Token $authToken',
