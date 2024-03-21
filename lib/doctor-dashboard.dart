@@ -5,6 +5,7 @@ import 'drawer_widget.dart';
 import 'patient_detail_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+
 class PatientListPage extends StatefulWidget {
   @override
   _PatientListPageState createState() => _PatientListPageState();
@@ -32,7 +33,7 @@ class _PatientListPageState extends State<PatientListPage> {
         );
 
         if (response.statusCode == 200) {
-          final data = json.decode(response.body);
+          final data = json.decode(utf8.decode(response.bodyBytes)); // Décodage des caractères accentués
           if (data['today_appointments'] != null && data['today_appointments'] is List) {
             setState(() {
               todayAppointments = data['today_appointments'];

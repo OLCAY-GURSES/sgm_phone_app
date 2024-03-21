@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 
 
+
 class PatientDetailPage extends StatelessWidget {
   final dynamic data;
 
@@ -82,6 +83,19 @@ class PatientDetailPage extends StatelessWidget {
             child: ListTile(
               title: Text('Adresse'),
               subtitle: Text(patientAddress),
+            ),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Color(0xFF32DFFF),
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: ListTile(
+              title: Text('Motif'),
+              subtitle: Text(data['motif']),
             ),
           ),
 
