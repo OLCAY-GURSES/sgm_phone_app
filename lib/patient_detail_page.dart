@@ -24,6 +24,8 @@ class PatientDetailPage extends StatelessWidget {
     final patientLastName = data['patient_last_name'];
     final patientPhoneNumber = data['patient_phone_number'];
     final patientAddress = data['patient_address'];
+    final patientDateOfBirth = data['patient_date_of_birth'];
+    final formattedDateOfBirth = DateFormat('dd-MM-yyyy').format(DateFormat('yyyy-MM-dd').parse(patientDateOfBirth));
 
     return Scaffold(
       appBar: AppBar(
@@ -57,6 +59,19 @@ class PatientDetailPage extends StatelessWidget {
             child: ListTile(
               title: Text('Nom'),
               subtitle: Text(patientLastName),
+            ),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Color(0xFF32DFFF),
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: ListTile(
+              title: Text('Date de naissance'),
+              subtitle: Text(formattedDateOfBirth), // Utilisation de la date formatée
             ),
           ),
           Card(
